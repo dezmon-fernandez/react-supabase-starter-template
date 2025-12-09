@@ -10,6 +10,8 @@ Path to PRP file (e.g., `PRPs/my-feature.md`)
 
 ### Phase 0: Project Scaffolding (if new project)
 
+**Prerequisites:** User must have Supabase running (hosted or `supabase start`) and `.env.local` configured.
+
 If this is a fresh project (no `package.json` or no React dependencies), run scaffolding:
 
 ```bash
@@ -21,17 +23,11 @@ pnpm add @tanstack/react-router @tanstack/react-query @supabase/supabase-js @sup
 pnpm add react-hook-form @hookform/resolvers zod
 pnpm add -D @tanstack/router-plugin vitest @testing-library/react @testing-library/user-event jsdom @biomejs/biome
 
-# 3. Initialize Supabase
-supabase init
-
-# 4. Initialize shadcn/ui (auto-accept defaults)
+# 3. Initialize shadcn/ui (auto-accept defaults)
 pnpm dlx shadcn@latest init -y
 
-# 5. Add common shadcn components
+# 4. Add common shadcn components
 pnpm dlx shadcn@latest add button input form card skeleton toast -y
-
-# 6. Set up environment
-cp .env.example .env.local
 ```
 
 Then configure:
