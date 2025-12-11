@@ -180,8 +180,8 @@ Then execute: `/execute-react-supabase-prp PRPs/[generated-file].md`
 
 ## UX Best Practices
 
-- **Keep it simple** - Prefer straightforward layouts over complex nested components
-- **Use shadcn defaults** - Don't customize unless there's a clear reason
+- **Visual polish matters** - Customize theme colors, typography, and effects to match the app's aesthetic
+- **Keep layouts simple** - Prefer straightforward layouts over complex nested components
 - **Consistent spacing** - Use Tailwind spacing scale consistently (p-4, gap-4, etc.)
 - **Loading states** - Show skeletons for async content, disable buttons during submission
 - **Error states** - Display inline errors near the problem, not just toasts
