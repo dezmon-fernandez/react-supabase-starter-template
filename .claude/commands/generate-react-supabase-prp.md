@@ -73,7 +73,7 @@ Create `PRPs/[name].md` using base template:
 4. **Customize phases** - Adapt code examples to actual feature
 5. **Include AI docs context** - Paste relevant documentation snippets
 6. **Update gotchas** - Add feature-specific warnings discovered
-7. **If fresh project** (no `package.json`) - Verify `.env.local` exists with `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`. If missing, stop and ask user to create it. Then include Phase 0: Project Scaffolding in the PRP with Vite setup, dependencies, shadcn, and base config.
+7. **If fresh project** (no `package.json`) - Verify `.env.local` exists with `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY`. If missing, stop and ask user to create it. Then include Phase 0: Project Scaffolding in the PRP with Vite setup, dependencies, shadcn, and base config.
 8. **Include visual design spec** - If INITIAL.md provided, extract visual design section. If string input, infer aesthetic from the description (e.g., "luxury" → dark + gold + serif, "playful" → rounded + bright colors) or ask user. Include in PRP:
    - Theme colors (define in `@theme` block for Tailwind v4)
    - Typography (font families, heading styles)

@@ -210,7 +210,7 @@ Then execute: `/execute-react-supabase-prp PRPs/[generated-file].md`
 ### Client (.env.local)
 ```
 VITE_SUPABASE_URL=
-VITE_SUPABASE_ANON_KEY=
+VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY=
 VITE_STRIPE_PUBLISHABLE_KEY=
 ```
 

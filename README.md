@@ -9,7 +9,7 @@
 Make sure `.env.local` has your Supabase credentials:
 ```
 VITE_SUPABASE_URL=https://xxxxx.supabase.co
-VITE_SUPABASE_ANON_KEY=your-anon-key
+VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY=your-anon-key
 ```
 
 If using local Supabase:
