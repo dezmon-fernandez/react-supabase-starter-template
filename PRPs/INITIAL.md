@@ -77,6 +77,38 @@ Indexes:
 - [ ] AI (Vercel AI SDK)
 - [ ] Realtime subscriptions
 
+## Visual Design
+
+### Aesthetic
+[Choose one or describe your own:]
+- [ ] **Minimal/Clean** - Lots of whitespace, subtle shadows, neutral colors
+- [ ] **Bold/Vibrant** - Bright accent colors, strong typography, energetic
+- [ ] **Luxury/Cinematic** - Dark backgrounds, gold/metallic accents, serif headings, glows
+- [ ] **Playful/Friendly** - Rounded corners, illustrations, warm colors
+- [ ] **Corporate/Professional** - Conservative colors, structured layouts, trustworthy
+- [ ] **Custom:** [Describe the vibe]
+
+### Color Palette (optional)
+- **Primary:** [e.g., deep navy #1a1a2e]
+- **Accent:** [e.g., gold #d4af37]
+- **Background:** [e.g., dark #0f0f0f or light #fafafa]
+
+### Typography (optional)
+- **Headings:** [e.g., serif like Playfair Display, or sans like Inter]
+- **Body:** [e.g., Inter, system fonts]
+
+### Key UI Elements
+- [ ] Hero with video background
+- [ ] Hero with image/gradient
+- [ ] Animated transitions (Framer Motion)
+- [ ] Card-based layouts
+- [ ] Masonry grid
+- [ ] Custom glows/shadows
+- [ ] Dark mode / Light mode toggle
+
+### Inspiration (optional)
+[Link to sites or describe the feel you're going for]
+
 ---
 
 # Example: TaskFlow
@@ -181,3 +213,21 @@ Indexes:
 - [ ] File uploads (Supabase Storage)
 - [ ] AI (Vercel AI SDK)
 - [ ] Realtime subscriptions
+
+## Visual Design
+
+### Aesthetic
+- [x] **Minimal/Clean** - Lots of whitespace, subtle shadows, neutral colors
+
+### Color Palette
+- **Primary:** Indigo #6366f1
+- **Accent:** Emerald #10b981 (for success states)
+- **Background:** Light #fafafa
+
+### Typography
+- **Headings:** Inter (bold)
+- **Body:** Inter
+
+### Key UI Elements
+- [x] Card-based layouts
+- [ ] Dark mode / Light mode toggle (v2)

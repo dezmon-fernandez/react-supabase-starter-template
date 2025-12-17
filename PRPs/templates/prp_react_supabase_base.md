@@ -70,6 +70,8 @@ src/
 - Features → Features
 - Shared → Features NEVER
 
+**Supabase Client**: `import { supabase } from '@/shared/utils/supabase'`
+
 ---
 
 ## Requirements
@@ -508,30 +510,33 @@ Task 5.1 - Index:
 
 ### Phase 6: Route Integration
 
+> For each feature slice, integrate into a route - create new or modify existing.
+
 ```yaml
-Task 6.1 - Route:
-  file: src/routes/_authenticated/[ROUTE].tsx
+# Pattern A: New route
+Task 6.1 - [Feature] Route (NEW):
+  file: src/routes/[ROUTE_PATH].tsx
   content: |
     import { type ReactElement } from 'react';
     import { createFileRoute } from '@tanstack/react-router';
-    import { [Item]List } from '@/features/[FEATURE]';
-    import { Button } from '@/shared/components/button';
+    import { [COMPONENTS] } from '@/features/[FEATURE]';
 
-    export const Route = createFileRoute('/_authenticated/[ROUTE]')({
+    export const Route = createFileRoute('[ROUTE_PATH]')({
       component: [Page],
     });
 
     function [Page](): ReactElement {
       return (
-        <div className="container py-8">
-          <div className="flex items-center justify-between mb-8">
-            <h1 className="text-3xl font-bold">[PAGE_TITLE]</h1>
-            <Button>New [Item]</Button>
-          </div>
-          <[Item]List />
-        </div>
+        [PAGE_LAYOUT_USING_FEATURE_COMPONENTS]
       );
     }
+
+# Pattern B: Modify existing route
+Task 6.2 - [Feature] in [Existing] Route (MODIFY):
+  file: src/routes/[EXISTING_ROUTE].tsx
+  changes:
+    - Add import: import { [COMPONENTS] } from '@/features/[FEATURE]';
+    - Add to JSX: [WHERE_TO_ADD_FEATURE_COMPONENTS]
 ```
 
 ---
@@ -548,7 +553,7 @@ Run tests after each phase that introduces testable code:
 | 3. Hooks | **YES** | `pnpm test src/features/[FEATURE]/__tests__/use-*` |
 | 4. Components | **YES** | `pnpm test src/features/[FEATURE]/__tests__/` |
 | 5. Public API | No | - |
-| 6. Routes | **YES** | `pnpm test --run` (full suite) |
+| 6. Routes | Verify | `test -f [route-path] && pnpm build` |
 
 ### Level 1: Build + Tests
 ```bash

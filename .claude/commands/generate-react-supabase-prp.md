@@ -13,7 +13,7 @@ Accepts:
 
 ### 1. Load Base Template
 - Read `PRPs/templates/prp_react_supabase_base.md` completely
-- This contains patterns, code examples, validation gates, and documentation links
+- This is the skeleton structure - replace all `[PLACEHOLDERS]` with actual feature details
 
 ### 2. Analyze Request
 - Read the input from $ARGUMENTS
@@ -67,13 +67,19 @@ Populate the PRP's "Research & Documentation" section with:
 
 Create `PRPs/[name].md` using base template:
 
-1. **Fill metadata** - Feature name, affected slices, dependencies
+1. **Fill metadata** - Feature name, affected slices, database changes, dependencies
 2. **Populate requirements** - From INITIAL.md or FEATURE.md input
 3. **Add research section** - All documentation links and findings
 4. **Customize phases** - Adapt code examples to actual feature
 5. **Include AI docs context** - Paste relevant documentation snippets
 6. **Update gotchas** - Add feature-specific warnings discovered
-7. **If fresh project** (no `package.json`) - Verify `.env.local` exists with `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`. If missing, stop and ask user to create it. Then include Phase 0: Project Scaffolding in the PRP with Vite setup, dependencies, shadcn, and base config.
+7. **If fresh project** (no `package.json`) - Check `.env.local` exists using `test -f .env.local` (never read its contents). If missing, stop and ask user to copy from `.env.example` and add their Supabase keys. Then include Phase 0: Project Scaffolding in the PRP with Vite setup, dependencies, shadcn, and base config. Note: `src/shared/utils/supabase.ts` already exists with correct env vars - do not overwrite.
+8. **Include visual design spec** - If INITIAL.md provided, extract visual design section. If string input, infer aesthetic from the description (e.g., "luxury" → dark + gold + serif, "playful" → rounded + bright colors) or ask user. Include in PRP:
+   - Theme colors (define in `@theme` block for Tailwind v4)
+   - Typography (font families, heading styles)
+   - Custom utility classes (glows, gradients, effects)
+   - Component styling direction (e.g., "cinematic cards with gold borders")
+9. **Route integration for every feature** - For each feature slice created, include a Task in Phase 6 that integrates it into a route. Create a new route file if one doesn't exist for that feature. Routes must import from `@/features/[name]` and compose the feature's exported components.
 
 ### 5. Validate PRP Completeness
 
@@ -84,6 +90,7 @@ Before saving, verify:
 - [ ] Database schema matches data model
 - [ ] Test files include feature-specific assertions
 - [ ] Gotchas section updated with research findings
+- [ ] Visual design section includes theme.css with colors, fonts, and custom utilities
 
 ## Output
 

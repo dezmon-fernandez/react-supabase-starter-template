@@ -179,9 +179,9 @@ function FeatureComponent(): ReactElement {
 Then execute: `/execute-react-supabase-prp PRPs/[generated-file].md`
 
 ## UX Best Practices
-
-- **Keep it simple** - Prefer straightforward layouts over complex nested components
-- **Use shadcn defaults** - Don't customize unless there's a clear reason
+- **Leverage shadcn structure** - Don't rewrite components; customize via props and Tailwind
+- **Simple component trees** - Prefer flat, readable structures over deep nesting
+- **Make aesthetic choices** - Colors, transitions, and typography should feel intentional, not stock
 - **Consistent spacing** - Use Tailwind spacing scale consistently (p-4, gap-4, etc.)
 - **Loading states** - Show skeletons for async content, disable buttons during submission
 - **Error states** - Display inline errors near the problem, not just toasts
@@ -210,7 +210,7 @@ Then execute: `/execute-react-supabase-prp PRPs/[generated-file].md`
 ### Client (.env.local)
 ```
 VITE_SUPABASE_URL=
-VITE_SUPABASE_ANON_KEY=
+VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY=
 VITE_STRIPE_PUBLISHABLE_KEY=
 ```
 

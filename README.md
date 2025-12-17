@@ -9,13 +9,18 @@
 Make sure `.env.local` has your Supabase credentials:
 ```
 VITE_SUPABASE_URL=https://xxxxx.supabase.co
-VITE_SUPABASE_ANON_KEY=your-anon-key
+VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY=your-anon-key
 ```
 
 If using local Supabase:
 ```bash
 supabase start
 # Use credentials from terminal output
+```
+
+Link to your remote Supabase project:
+```bash
+supabase link --project-ref your-project-ref
 ```
 
 ### 2. Describe Your App
