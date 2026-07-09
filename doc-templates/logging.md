@@ -144,6 +144,22 @@ external.
 └── webhook.failed             # Webhook processing failed
 ```
 
+### Agent Domain (AI/LLM features)
+
+```
+agent.
+├── lifecycle.started           # Agent run started
+├── lifecycle.completed         # Agent run finished
+├── tool.execution_started      # Tool call began
+├── tool.execution_completed    # Tool finished successfully
+├── tool.execution_failed       # Tool call failed
+├── llm.call_started            # Model API call initiated
+├── llm.call_completed          # Model call completed (log tokens + cost)
+├── llm.call_failed             # Model call failed
+├── memory.storage_written      # Data persisted to agent memory
+└── memory.retrieval_queried    # Agent memory queried
+```
+
 ### Feature Domains
 
 Use the feature name as domain for business logic:
@@ -188,6 +204,13 @@ order.
 - `endpoint` — API endpoint
 - `statusCode` — Response status
 - `durationMs` — Call duration
+
+### Agent Logs
+- `agentId` / `runId` — Agent instance and execution run
+- `tool` — Tool name
+- `model` — Model name
+- `tokensPrompt` / `tokensCompletion` — Token counts
+- `costUsd` — Estimated cost
 
 ## What to Log
 
