@@ -2,103 +2,86 @@
 
 > Base template — specialize for target stack. Replace `[STACK-SPECIFIC]` sections.
 
-Scope: backend services and data engines — systems whose features share a persistent store and expose entry points (CLI commands, jobs, API routes). For frontend/fullstack apps, read `vertical-slice-architecture.md` — it defines the feature-composition import model those apps use; the boundary rules below assume slices integrate through the schema instead.
+Scope: backend services — APIs, workers, data pipelines. For frontend/fullstack apps, read `vertical-slice-architecture.md`, which defines the feature-composition model those apps use.
 
-## The Core Rule: Directories Are Capabilities, Never Stages
+## Why Slices
 
-A stage is where data flows; a slice is where code lives. Name folders for what the system does, never for the pipeline step they perform. The tree is the system's mental model — `features/` alone should tell a reader what the service does.
+An agent (or developer) working on one feature should load one folder and have the full picture: the routes, the logic, the models, the errors, and the tests. Organize by layer instead and every feature is smeared across the tree — each task starts with an exploration tax, and each change ripples through folders the task never mentioned.
+
+## The Core Rule: Organize by Capability, Never by Layer or Stage
+
+A layer is *how* code executes; a stage is *where data flows*; a slice is *what the system does*. Name folders for capabilities. The tree is the system's mental model — `features/` alone should tell a reader what the service does.
 
 Two shapes are banned:
 
-1. **Stage-named top-level directories** (`sources/`, `handlers/`, `processors/`, `store/`, `api/` as horizontal layers) — one feature ends up smeared across all of them, and adding one capability touches every layer.
-2. **A query/repository module shared across slices** — it becomes an unowned god-file every task threads through.
+1. **Layer- or stage-named top-level directories** (`controllers/`, `services/`, `models/`, `repositories/`, `sources/`, `processors/` as the organizing principle) — one feature ends up spread across all of them.
+2. **A data-access or utility god-module shared by every feature** — it becomes an unowned file that every task threads through and no slice is responsible for.
 
-## Layout: A Shared Kernel Under Feature Slices
+## What a Slice Owns
 
-```
-migrations/                 schema — source of truth
-src/<service>/
-  kernel/                   infrastructure ONLY
-    config.*                environment / settings
-    db.*                    engine/connection + generic write helpers (e.g. idempotent upsert)
-    rows.*                  row/record models mirroring the schema, one per table
-    contracts.*             cross-cutting interfaces that slices implement
-    clients/                read-only external API clients (fetch; never write the store)
-    tests/
-  features/
-    <capability_a>/
-      <logic>.*             the slice's decisions and transformations
-      queries.*             every read/write this slice performs against the store
-      tests/
-    <capability_b>/
-      ...
-```
+Every property below is a rule for writing new code, and together they are the definition of done for a slice. `[STACK-SPECIFIC: map each artifact to this stack's file names.]`
 
-### Kernel: infrastructure only
+| # | Property | The rule | Why it matters to an agent |
+|---|----------|----------|---------------------------|
+| 1 | Own folder | All the feature's code lives under one folder | One read loads everything; deleting the feature = deleting one folder |
+| 2 | Local models | The feature's domain/persistence models live in the slice | The data shape is visible next to the logic that uses it |
+| 3 | Local schemas | Request/response validation lives in the slice | The boundary contract is visible where it's enforced |
+| 4 | Local entry points | Routes / CLI commands / job definitions live in (or register from) the slice | The way in is discoverable from the slice itself |
+| 5 | Local business logic | The substance lives in the slice's service/logic module, not in `utils/` or `lib/` | The decision-making code is where the feature is |
+| 6 | Local errors | Feature-specific error types live in the slice | An error is defined next to the code that raises it |
+| 7 | Colocated tests | `tests/` sits inside the slice | Modifying the feature surfaces its tests without a separate search |
+| 8 | Explicit public API | One index/barrel module controls what the slice exports | Consumers know what's supported; everything else is internal |
+| 9 | Internals stay internal | Helpers not in the public API are never imported from outside | Refactoring inside a slice can't break other slices |
+| 10 | Minimal cross-slice coupling | The slice imports from as few other slices as possible, always via their public API | Changes don't ripple; the agent can plan, implement, and validate inside one slice |
 
-What belongs: config, database engine + generic write helpers, row models mirroring the schema, pure domain functions with exactly one correct implementation, read-only external API clients, cross-cutting contracts.
+Cohesion beats line count: a long, cohesive logic module is healthier than a short one that reaches into many other slices. Judge a slice by rule 10, not by file size.
 
-The litmus: anything that **decides, fetches-and-writes, or serves an operator command** belongs in a slice. A kernel that accretes feature logic becomes a god-layer.
+Not every slice needs every artifact — start with the minimum and add files as the feature grows. What it does have must live in the slice.
 
-### Feature slices
+## Core: Infrastructure Only
 
-Each `features/<capability>/` owns its logic modules, its `queries` module, its entry points, and its co-located `tests/`. Registration is one entry in one registry, made in the same change — an entry point without a registry entry is an unfinished feature.
+`core/` (or `kernel/`, `lib/`) holds what exists before any feature: config, database/client setup, logging, middleware, base error types, cross-cutting contracts, external service clients.
 
-[STACK-SPECIFIC: the registry — script/entry-point table, route table, or DI container.]
+The litmus: anything that **makes a feature-level decision** belongs in a slice. A core that accretes feature logic becomes a god-layer — the layered architecture reborn under a different name.
 
-## Slice Boundaries
+## Shared: What Stays Out of Slices
 
-- A slice's production code imports **only the kernel and its own slice**. Zero cross-slice imports.
-- **Readers own their reads.** To read a table another slice writes, write the query in your own `queries` module. The schema (migrations + the kernel's row models) is the contract between slices — queries against shared tables are the integration point, not imports.
-- Tests may import another slice's writers to seed scenarios; production code may not.
+Keep shared and small:
+
+- Cross-cutting concerns: auth middleware, logging, request correlation.
+- Database connection / session management.
+- Framework setup itself.
+- Domain-free utilities (date helpers, string formatting).
+
+Everything else follows the three-feature rule (`vertical-slice-architecture.md` defines the process): first instance inline in its slice, second duplicated, third extracted to shared.
+
+## Cross-Slice Dependencies
+
+- **Read** from another slice only through its public API (rule 8) — never reach into its internals.
+- **Write** to another slice's data only by calling that slice's public API — the owning slice stays the only writer of its data.
+- Keep the dependency count low (rule 10). If a slice needs many others, its boundary is drawn wrong — redraw the slice, don't add imports.
+- `[STACK-SPECIFIC: some services integrate slices through the shared persistence schema instead of imports (each slice queries shared tables itself, and slice-to-slice imports are banned entirely). State which contract this stack uses.]`
+
+## Writing New Code in a Sliced Codebase
+
+- **A new capability is a new slice.** Never a new file in a layer folder, never a new case in a shared module.
+- **Copy the sibling.** Before writing, find the nearest existing slice of the same kind and mirror its skeleton — same file set, same ordering, same naming. The rules file names one canonical exemplar per slice kind; keep siblings symmetric so the nearest neighbor is always a reliable template. The target: **adding the Nth thing is copying the (N−1)th.**
+- **Register in the same change.** A slice's entry point gets its registry entry (route table, script registry, DI container) in the change that creates it — an unregistered entry point is an unfinished feature. `[STACK-SPECIFIC: the registry.]`
+- **Extract only what has one right answer.** Policy — thresholds, filters, anything a feature decides or an operator tunes — stays inline in its slice. The test is the name: an extraction must carry a domain name with one meaning; if it needs a framework name (`runner`, `handler`, `BaseX`), it is abstracting over deliberate differences — keep the copies.
 
 ## Enforcement
 
 Conventions rot without it. Use all three rungs:
 
-1. **Rules teach.** The project rules file states the layout and "to add X, copy Y."
-2. **Linters enforce.** An import-boundary linter fails the build on any cross-slice import: the kernel never imports a slice, and no slice imports another. [STACK-SPECIFIC: import-linter (Python), dependency-cruiser or eslint-plugin-boundaries (JS/TS); where the contracts live.]
-3. **Structure prevents.** A module that never imports a dependency cannot misuse it. Scoping a task to one slice makes out-of-bounds edits impossible, not merely discouraged.
+1. **Rules teach.** The project rules file states the layout and names the canonical sibling to copy.
+2. **Linters enforce.** An import-boundary linter fails the build when core imports a slice, or a slice imports another slice's internals. `[STACK-SPECIFIC: import-linter (Python), dependency-cruiser or eslint-plugin-boundaries (JS/TS); where the contracts live.]`
+3. **Structure prevents.** A module that never imports a dependency cannot misuse it — the boundaries make out-of-scope edits impossible, not merely discouraged.
 
-**Definition of done, task-agnostic:** lint, format check, import contracts, typecheck, and tests all pass before any task is complete. [STACK-SPECIFIC: the exact commands.]
+**Definition of done, task-agnostic:** lint, format check, import-boundary check, typecheck, and tests all pass before any task is complete. `[STACK-SPECIFIC: the exact commands.]`
 
-## Copy the Sibling
+## Slice Self-Check
 
-- Keep a **named canonical skeleton** per slice kind: the rules file points at one exemplary file — "a new collector copies `features/<x>/<file>`."
-- Siblings share an identical file set, ordering, and naming, so the nearest neighbor is a reliable template.
-- The metric: **adding the Nth thing is copying the (N−1)th.** A developer or agent then needs one neighbor plus the interface in context — never the whole system.
-
-## The Extraction Litmus
-
-Extract only what has one right answer; policy stays inline in its slice.
-
-- Safe to share: code with a single correct behavior — payload parsing for one feed, identity resolution, one piece of math.
-- Never shared: what a slice decides or an operator tunes — thresholds, window filters, failure-containment granularity.
-- The test is the name: an extraction must carry a **domain name with one meaning**. If it needs a framework name (`runner`, `handler`, `BaseX`), it is abstracting over deliberate differences — keep the copies. Visible duplication reads better than a shared abstraction over deliberate differences.
-- Sharing follows the three-feature rule (`vertical-slice-architecture.md` defines the process): first instance inline, second duplicated, third extracted.
-
-## Readability Floor
-
-- **Variable names are never abbreviated.** Loop and comprehension bindings are as much a part of the interface as a function's parameters. A short name saves the writer keystrokes and costs every future reader a lookup.
-- **No comment needs another document open to make sense.** State the reasoning in full, in place. A citation (ticket number, plan section, migration number) never stands in for the explanation — references dangle when the target renumbers or disappears.
-- **Layout is formatter-enforced**, and the format check is part of the done gate — no hand-negotiated style.
-
-## Refactor Discipline
-
-A structural refactor ships with behavior-preservation proof:
-
-- test-function count identical before and after,
-- functions relocated verbatim,
-- public entry-point names stable,
-- full done gate green.
-
-Prove invariance; never assert it.
-
-## Testing
-
-- Tests live with their slice: `features/<slice>/tests/`, `kernel/tests/`.
-- **Pure halves** (parsing, logic — no I/O) run without a database and stay fast.
-- **Integration halves** are marked and run against an isolated test database; the suite skips them when the database is absent. [STACK-SPECIFIC: the marker and fixture.]
+A slice is done when every row in the What a Slice Owns table passes for it — cite the file that satisfies each row. A row that can't be cited is the next thing to fix.
 
 ## [STACK-SPECIFIC] Project Structure
 
