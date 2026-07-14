@@ -48,6 +48,9 @@ instruction itself.
 - Does any sentence describe the document rather than do its job?
 - Does any sentence compare the document to a sibling, a prior version, or the conversation that
   produced it?
+- Does any term owe its meaning to the session that authored it — coined mid-conversation and never
+  defined in place? A term's only legitimate sources are ordinary vocabulary, an inline gloss at
+  first use, or a durable document the sentence names.
 - Does any placeholder describe in prose a structure it could show as a skeleton?
 - Does any reference lack the reason it's there?
 - Could the reader act without chasing something the document names but doesn't carry?
