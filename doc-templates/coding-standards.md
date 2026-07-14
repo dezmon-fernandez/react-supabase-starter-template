@@ -34,6 +34,12 @@ These apply across all stacks:
 
 [STACK-SPECIFIC: Add a before/after code example in this stack's language showing the early return pattern.]
 
+## Module Organization: Stanzas
+
+Within a module, group code by what changes together, never by what looks alike. A file serving many parallel features — a CLI's subcommands, a router's routes, an event map's handlers — reads as one identically-shaped block per feature (a *stanza*), over a short shared section holding only what two or more stanzas use. Never organize by layer (all parsers together, then all handlers): no real task is ever "change all the parsers" — every task is "change one feature," and layering splits that one task across the whole file.
+
+The test: adding the next feature means copying one sibling stanza top to bottom. When that stops being true, the shape has drifted — fix the drift, don't invent a new organization.
+
 ## Components
 
 These apply to UI stacks. Remove this section for non-UI stacks (agents, CLI tools, APIs).
@@ -48,9 +54,11 @@ These apply to UI stacks. Remove this section for non-UI stacks (agents, CLI too
 
 ## Comments
 
-- **Don't comment what the code does** — the code says that.
-- **Do comment why** — business rules, non-obvious constraints, workarounds.
-- **Delete commented-out code.** Git has history.
+- **Comment the why, once.** Every invariant has ONE owning site — the module that enforces it — where the full reasoning lives. Every other site that touches the invariant states the constraint in one standalone sentence (naming the owning module is welcome), never re-derives it: prose has no CI, so each duplicated derivation is a copy that silently rots when the code changes.
+- **Always keep:** external-world facts the code cannot express and tests cannot cheaply pin — vendor API quirks, billing/quota asymmetries, provider payload shapes. Deleting these loses knowledge that was paid for in incidents, credits, or debugging.
+- **Cut on sight:** a comment restating the adjacent code or assert; a module docstring restating its functions' docstrings; prose re-deriving reasoning that already lives at the owning site or in a test that pins it; commented-out code (version control has history).
+- **The one-sentence form still stands alone** — it states the constraint, never a bare citation. A plan task label, an edge-case row ID, a spec section number, or a migration number is not an explanation: those dangle the moment the doc is deleted or the numbering shifts. A trailing reference tag is permitted only *after* the constraint is stated, and only against a numbering the repo maintains as durable.
+- **Scope: prose commentary only.** Imports, function calls, and a comment naming a sibling module because the pattern mirrors it are the codebase, not documentation — those are fine.
 
 [STACK-SPECIFIC: TODO format, doc comment conventions (JSDoc, docstrings, GoDoc, etc.)]
 
