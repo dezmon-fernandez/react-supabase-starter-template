@@ -17,6 +17,28 @@ Two shapes are banned:
 1. **Layer- or stage-named top-level directories** (`controllers/`, `services/`, `models/`, `repositories/`, `sources/`, `processors/` as the organizing principle) — one feature ends up spread across all of them.
 2. **A data-access or utility god-module shared by every feature** — it becomes an unowned file that every task threads through and no slice is responsible for.
 
+## Slice Grain: How Big Is One Slice?
+
+The core rule names the unit — a whole thing the system does. Grain is the follow-up question: when several folders are really pieces of one thing, they are fragments wearing slice names, and they belong inside one bigger slice.
+
+**Slice along the axis where external sources vary.** A domain that brings its own upstream sources — its own feeds, schemas, vocabulary, and run-order — is one bounded thing, even when it decomposes internally into several pipelines. Give the domain one slice; make the pipelines subpackages inside it. The kernel holds the mirror image: clients and helpers that sit behind interfaces uniform across domains.
+
+The fragment tell, checkable in any tree:
+
+- Several sibling folders share one vocabulary and read or write each other's data in a required order.
+- "Cross-slice" orchestration between them keeps needing exceptions.
+- No one of them can be owned, tested, or deleted alone.
+
+When the tell fires, the folders are stages of one domain's pipeline — nest them as subpackages of a domain slice. The groupings can keep their names and their operational meaning; they stop being slice boundaries.
+
+**Apply the test to every slice as its real inputs arrive.** Code whose vocabulary belongs to one domain lives in that domain's slice, even if it began life elsewhere; only machinery that never touches domain vocabulary stays domain-free. A slice that hollows out as its contents migrate to the right grain is the rule working, not failing.
+
+**Copy-the-sibling works at every grain.** Within a domain slice, a new pipeline copies its sibling subpackage; across domains, a new domain copies the whole sibling slice. Symmetric shapes keep duplication visible, which is what makes the three-instance extraction call obvious. The same rule continues below the file boundary — read the Module Organization (stanza) section of `coding-standards.md` for the within-module grain.
+
+**Depth follows the axes.** One folder level per axis of variation, each level answering a distinct question (which domain → which pipeline → which artifact). Two levels answering the same question, or a level with one permanent child, is the over-nesting tell.
+
+**Downstream services usually don't domain-slice.** A service consuming an upstream that already absorbed the domain variation — one contract, one generated schema, the domain arriving as a parameter — has no source variation left to slice on; its whole things are its own workflows and views. A domain folder there would hold near-identical copies differing by a parameter: duplication over uniformity, the inverse of the extraction litmus. Domain slicing earns itself downstream only when domain-specific behavior genuinely reaches that layer.
+
 ## What a Slice Owns
 
 Every property below is a rule for writing new code, and together they are the definition of done for a slice. `[STACK-SPECIFIC: map each artifact to this stack's file names.]`
