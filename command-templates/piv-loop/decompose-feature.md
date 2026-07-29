@@ -64,6 +64,8 @@ slices — or a plan wearing a roadmap's clothes.
 
 ## Output
 
+The roadmap you produce follows `.agents/documentation/authoring-for-agents.md` — read it before writing, and run its smell test over the finished roadmap: the planning session that picks up a slice holds only the roadmap and the repo, never this decomposition session, so every slice entry must be self-contained and coordinate-free.
+
 Write the roadmap to `.agents/feature-ideas/<feature>-roadmap.md`:
 
 ```markdown

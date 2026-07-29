@@ -98,7 +98,10 @@ Each template needs at minimum:
 
 | Directory | Purpose |
 |-----------|---------|
-| `skill-templates/` | Base Claude skills, specialized per template into `.claude/skills/` |
-| `doc-templates/` | Base standards docs (logging, errors, security, testing, etc.) — selected and specialized per template into `docs/` |
+| `command-templates/` | Base workflow commands (the `piv-loop/` set, `create-prd`, `code-review`, `commit`), specialized per template into `.claude/commands/` |
+| `hook-templates/` | Base hooks (`prose-gate`), wired per template into `.claude/settings.json` |
+| `skill-templates/` | Base Claude skills (`audit-architecture`, `doc-sweep`, `comment-review`), specialized per template into `.claude/skills/` |
+| `doc-templates/` | Base standards docs (logging, errors, security, testing, db practices, etc.) — selected and specialized per template into `.agents/documentation/` |
+| `agent-templates/` | Base subagent definitions (`plan-researcher`), specialized per template into `.claude/agents/` |
 
 The quickstart script will automatically discover new templates.

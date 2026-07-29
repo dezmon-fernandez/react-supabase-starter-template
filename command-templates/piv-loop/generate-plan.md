@@ -80,11 +80,14 @@ So that <benefit/value>
 - Understand database/model patterns if applicable
 - Identify authentication/authorization patterns if relevant
 
-**Clarify Ambiguities:**
+**Collect Open Questions (do not ask yet):**
 
-- If requirements are unclear at this point, ask the user to clarify before you continue
-- Get specific implementation preferences (libraries, approaches, patterns)
-- Resolve architectural decisions before proceeding
+- Note every ambiguity, unstated preference, and unresolved architecture choice you meet while
+  researching — the feature idea's own "Open questions" section included
+- These are resolved at the Decision Gate (Phase 3.5), after research has armed you to ask each
+  one with a verified recommendation attached
+- Exception: ask immediately only when the ambiguity blocks the research itself (you cannot tell
+  which subsystem or approach to investigate)
 
 ### Phase 3: External Research & Documentation
 
@@ -118,6 +121,36 @@ So that <benefit/value>
   - Why: Shows how to connect components
 ```
 
+### Phase 3.5: Decision Gate (mandatory — never write the plan while an open question remains)
+
+Open questions in a feature idea are user policy wearing an architecture costume: the codebase
+cannot answer them, and a plan that guesses them decides for the user. This gate runs after
+research on purpose — research is what arms you to ask well.
+
+**Collect every unresolved decision:**
+
+- The "Open questions" section of the feature idea document, if one exists
+- The open questions noted during Phase 2
+- Any architecture or policy choice research surfaced that the user has not already decided
+  (scope, defaults, spend/cost posture, surfaces, cadence)
+
+**Resolve the set:**
+
+1. Sort each item first. If the codebase, an existing standard, or a prior user decision answers
+   it, resolve it yourself and record the resolution — never ask what you can verify.
+2. For each remaining item, form a recommendation before asking. Verify its feasibility in the
+   code, and attach the concrete trade-off (cost, blast radius, maintenance) the user needs in
+   order to choose well.
+3. Ask via AskUserQuestion in batches of up to 4 — recommended option first, labeled
+   "(Recommended)", every option's description carrying its consequence.
+4. Read each answer as an answer AND as new input. An answer may raise a new question, contradict
+   an assumption, or ask you something back — fact-check it against the code, answer it, and loop
+   until the set is empty.
+
+**Done when:** zero open questions remain, and every decision appears in the plan as a settled
+fact the executor can act on (in the Feature Description or NOTES) — never as an option list or
+an open item. The executor holds only the plan, not this conversation.
+
 ### Phase 4: Deep Strategic Thinking
 
 **Think Harder About:**
@@ -137,7 +170,12 @@ So that <benefit/value>
 - Plan for backward compatibility if needed
 - Consider scalability implications
 
+A new user-owned decision surfaced here goes back through the Decision Gate (Phase 3.5);
+decisions already settled there stay settled.
+
 ### Phase 5: Plan Structure Generation
+
+The plan document you produce follows `.agents/documentation/authoring-for-agents.md` — read it before writing, and run its smell test over the finished plan: the executor holds only the plan and the repo, never this planning session, so every section must be self-contained, coordinate-free, and verifiable.
 
 **Create comprehensive plan with the following structure:**
 
@@ -440,6 +478,13 @@ Execute every command to ensure zero regressions and 100% feature correctness.
 - [ ] Task descriptions use codebase keywords
 - [ ] Validation commands are non interactive executable
 
+### Decisions Settled ✓
+
+- [ ] The Decision Gate (Phase 3.5) ran: every open question was resolved with the user or
+      verified from the code
+- [ ] Each settled decision is stated in the plan as a fact with its chosen mechanism
+- [ ] No plan section hands the executor an option list or an unanswered question
+
 ## Success Metrics
 
 **One-Pass Implementation**: Execution agent can complete the feature without additional research or clarification
@@ -457,6 +502,7 @@ Execute every command to ensure zero regressions and 100% feature correctness.
 After creating the Plan, provide:
 
 - Summary of feature and approach
+- The decisions settled at the Decision Gate and what was chosen for each
 - Full path to created Plan file
 - Complexity assessment
 - Key implementation risks or considerations

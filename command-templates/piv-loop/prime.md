@@ -25,6 +25,15 @@ Show directory structure:
 - Read README files at project root and major directories
 - Read any architecture documentation
 
+**Artifact index — the domain-doc map** (read each when its trigger fires; pull the relevant ones now during priming, the rest on demand):
+
+| Artifact | Read when… |
+|---|---|
+| `.agents/PRD.md` | the spec / source of truth — before any feature work. |
+| `[STACK-SPECIFIC: the schema source of truth, e.g. migrations/*.sql — drop this row if the stack has none]` | you need table shapes, columns, or constraints. |
+| `[PROJECT-SPECIFIC: a domain standard, e.g. .agents/documentation/<topic>.md]` | `[PROJECT-SPECIFIC: its trigger, e.g. working in that domain's slices.]` |
+| `[PROJECT-SPECIFIC: a workflow or reference doc the project relies on]` | `[PROJECT-SPECIFIC: its trigger.]` |
+
 ### 3. Identify Key Files
 
 Based on the structure, identify and read:

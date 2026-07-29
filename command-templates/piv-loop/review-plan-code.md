@@ -27,8 +27,9 @@ the plan, not just the code.
 
 ### 1. Load the contract
 
-Read the plan's CONTRACT, ACCEPTANCE CRITERIA, behavioral rules, and edge-case table. Extract them as
-a flat list of conditions the code must meet — this list is what you verify against.
+Extract every condition the code must meet — surfaces and their semantics, data shapes, invariants,
+edge cases, acceptance criteria — from wherever the plan states them, into one flat list. This list
+is what you verify against.
 
 ### 2. Read the implementation
 
@@ -47,7 +48,16 @@ Read the public surfaces for cases the plan did not name but the code must handl
 or malformed input, error and ordering paths, domain rules implied but unstated. Each one you find is
 a hole in the plan.
 
-### 5. Classify each finding
+### 5. Coordinate-leakage sweep
+
+Read the diff's identifiers, comments, docstrings, and test names as a stranger holding the repo at
+HEAD, every planning doc deleted. Anything that needs the plan, a roadmap, or the chat open to make
+sense is leaked tribal knowledge — a test named for a spec row instead of the behavior it pins, a
+comment citing a coordinate instead of stating its reason. A durable citation that follows an inline
+reason (PRD §, a migration) is sanctioned; flag one only when it stands alone. A leak is a **code
+defect**; when the plan instructed the leaked name, it is also a **plan gap**.
+
+### 6. Classify each finding
 
 - **Met** — satisfied and tested.
 - **Code defect** — the plan was clear; the code does not satisfy it. The fix is in the code.
@@ -85,6 +95,7 @@ Every public-method path tested: <yes, or the untested paths>
 - [ ] Every contract condition is checked and carries file:line evidence.
 - [ ] Every public-method path is confirmed tested.
 - [ ] Unenumerated cases are actively searched for, not just the listed ones verified.
+- [ ] The diff was swept for planning-coordinate leakage in identifiers, comments, docstrings, and test names.
 - [ ] Each finding is classified so its fix routes to the code, the plan, or the standards.
 
 ## Report

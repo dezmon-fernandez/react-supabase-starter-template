@@ -7,8 +7,8 @@ discussion), which keeps a working voice.
 ## What it carries
 
 **Grounded and self-contained.** The reader acts from this document and the sources it names, nothing
-more. Carry the context the task needs; for anything external, name it with what it gives — "read X
-for the error-handling pattern step 3 mirrors," never "see X." A pointer without a reason is a
+more. Carry the context the task needs. For anything external, name it with what it gives: "read X
+for the error-handling pattern step 3 mirrors," not a bare "see X." A pointer without a reason is a
 breadcrumb the reader has to chase.
 
 **Structured.** Predictable, named sections in the same shape every time. An empty section is a
@@ -23,12 +23,30 @@ tests that confirm them. A document an agent works from needs a defined "done," 
 **No inherited context.** Leave out prior versions, past decisions, and how the document came to be.
 Include a fact only when it changes what the reader does — then state the fact, not the history.
 
+**The far reader.** Write to a junior engineer opening the document cold, months after it was
+written: no session memory, no adjacent conversation, no shared shorthand. Choose plain, concrete
+terms over abstraction. That is what maintainability means for a document that instructs: a long gap
+between reads costs the reader nothing.
+
+**One idea per sentence.** A sentence that stacks clauses with dashes and parentheses makes the
+reader hold all of them at once to parse any of them. Split it: state one fact and stop, then state
+the next. Several short sentences beat one that is merely complete.
+
+**Define a term where the reader first meets it.** Not only words coined in the authoring session,
+but any acronym, domain term, or internal name a competent newcomer to the codebase would not
+already know. Gloss it in parentheses at first use, or list it in a short terms section. The reader
+should never need to already speak the vocabulary to follow the document.
+
+**Say it once and stop.** State each point once, plainly enough to land in one pass. Do not restate
+it in new words. Over-explanation is a smell, not a kindness: if a rule needs a paragraph of
+justification before a reader will follow it, sharpen the rule instead of padding it.
+
 **Instruct; never differentiate.** Write every line for a reader who has only this document — not the
-sibling it varies, the version it replaces, or the session that produced it. A sentence that
-positions the document against an alternative ("no separate X," "unlike Y," "instead of the old
-way") encodes design history the reader can't see — cut it and state the rule it was arguing for.
-Likewise, examples lifted from the authoring session narrow the rule to the case just seen — state
-the litmus they point at, keeping at most one example chosen to teach.
+sibling it varies, the version it replaces, or the session that produced it. Some sentences position
+the document against an alternative, like "unlike the old way." A sentence like that encodes design
+history the reader can't see. Cut it, and state the rule it was arguing for. Examples lifted from the
+authoring session have the same problem: they narrow the rule to the case just seen. State the litmus
+they point at, and keep at most one example chosen to teach.
 
 **Show structure; don't describe it.** A template teaches by shape: skeleton fields, labeled lists,
 and fill-in bullets the reader completes. A prose paragraph specifying what a section "should
@@ -51,6 +69,11 @@ instruction itself.
 - Does any term owe its meaning to the session that authored it — coined mid-conversation and never
   defined in place? A term's only legitimate sources are ordinary vocabulary, an inline gloss at
   first use, or a durable document the sentence names.
+- Would a competent newcomer to the codebase hit a term the document uses but never defines?
+- Would a junior engineer opening the document cold, months from now, have to decode abstraction or
+  shorthand?
+- Does any sentence carry more than one idea, stacked with dashes or parentheses?
+- Is any point restated after it landed, or any rule padded with justification instead of sharpened?
 - Does any placeholder describe in prose a structure it could show as a skeleton?
 - Does any reference lack the reason it's there?
 - Could the reader act without chasing something the document names but doesn't carry?
