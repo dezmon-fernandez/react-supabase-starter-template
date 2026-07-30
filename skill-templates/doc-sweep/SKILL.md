@@ -22,8 +22,6 @@ from prose.
 
 - **CLAUDE.md** — the repo's rules for the `.agents/` tree: which docs are deleted when their
   work ships, which retire piece by piece, and any citation numbering it maintains as durable.
-- **The Comments section of `.agents/documentation/coding-standards.md`** — the citation rules
-  a code comment must follow; a tag that section does not sanction is a leak.
 - **`.agents/documentation/authoring-for-agents.md`** — the smell test for `.agents/` prose.
 
 ## Part 1 — is the doc still true?
@@ -74,8 +72,8 @@ Nothing else catches these, because they cross from code into docs.
   case. Re-status it naming both; deleting loses real unbuilt scope.
 - **Don't delete plans.** `/piv-loop:review-plan-code` runs after execution and needs the
   plan. Report a shipped plan as a candidate and let the operator decide.
-- **Don't review writing quality.** That is `/comment-review`. You check whether a statement
-  is still true, not whether it reads well.
+- **Don't review writing quality.** You check whether a statement is still true, not whether it
+  reads well.
 - **Don't check generated artifacts themselves.** `[PROJECT-SPECIFIC: artifacts CI already
   keeps in sync with the code — an API spec, a schema snapshot.]` You check what the docs
   *say about* them.
