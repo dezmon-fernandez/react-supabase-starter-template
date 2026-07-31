@@ -70,7 +70,7 @@ What does NOT belong in shared:
 
 Each feature owns everything it needs.
 
-A feature is a whole thing a user can name — never a pipeline stage and never a layer. Apps downstream of an API that already unified its domains (one contract, the domain arriving as a parameter) slice by feature alone: a per-domain folder would hold near-identical copies differing by a parameter. Within a module, the same grouping rule continues at file scale — read the Module Organization (stanza) section of `coding-standards.md`.
+A feature is a whole thing a user can name — never a pipeline stage and never a layer. Apps downstream of an API that already unified its domains (one contract, the domain arriving as a parameter) slice by feature alone: a per-domain folder would hold near-identical copies differing by a parameter. Within a module, the same grouping rule continues at file scale — read the File Granularity and Module Organization sections of `coding-standards.md`.
 
 [STACK-SPECIFIC: Feature structure — what files live in a feature for this stack.]
 

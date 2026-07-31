@@ -33,7 +33,7 @@ When the tell fires, the folders are stages of one domain's pipeline — nest th
 
 **Apply the test to every slice as its real inputs arrive.** Code whose vocabulary belongs to one domain lives in that domain's slice, even if it began life elsewhere; only machinery that never touches domain vocabulary stays domain-free. A slice that hollows out as its contents migrate to the right grain is the rule working, not failing.
 
-**Copy-the-sibling works at every grain.** Within a domain slice, a new pipeline copies its sibling subpackage; across domains, a new domain copies the whole sibling slice. Symmetric shapes keep duplication visible, which is what makes the three-instance extraction call obvious. The same rule continues below the file boundary — read the Module Organization (stanza) section of `coding-standards.md` for the within-module grain.
+**Copy-the-sibling works at every grain.** Within a domain slice, a new pipeline copies its sibling subpackage; across domains, a new domain copies the whole sibling slice. Symmetric shapes keep duplication visible, which is what makes the three-instance extraction call obvious. The same rule continues below the file boundary — read the File Granularity and Module Organization sections of `coding-standards.md` for the within-module grain.
 
 **Depth follows the axes.** One folder level per axis of variation, each level answering a distinct question (which domain → which pipeline → which artifact). Two levels answering the same question, or a level with one permanent child, is the over-nesting tell.
 

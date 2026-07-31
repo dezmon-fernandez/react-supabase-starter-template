@@ -12,8 +12,8 @@ description: >-
 
 # doc-sweep — find docs and pointers the code has outgrown
 
-`/piv-loop:generate-plan` reads `.agents/` and CLAUDE.md for context. A doc that describes
-finished work is not clutter — it is a false statement the next planner will act on.
+`/piv-loop:generate-plan` reads `.agents/` and CLAUDE.md for context, so a doc describing
+finished work is a false statement the next planner will act on.
 
 Your job: find those, prove each one with a check against the repo, and report. Do not guess
 from prose.
@@ -44,19 +44,17 @@ belongs in the report.
 
 ## Part 2 — do the pointers still land?
 
-Nothing else catches these, because they cross from code into docs.
-
 4. **Citation tags.** Where the repo sanctions a durable numbering (a rules list in CLAUDE.md,
    PRD section numbers), count the entries the numbering actually has, grep the code for every
    tag, and flag any tag above the count — that is a leaked plan number. For tags in range,
    read the target and confirm it is the one the sentence is about: inserting an entry
    renumbers every tag below it, and a wrong tag still reads as correct.
 5. **Architecture tree** — every feature slice and shared-core directory should appear in
-   CLAUDE.md's tree. Missing means invisible to the next planning session.
+   CLAUDE.md's tree.
 6. **Command reference** — compare CLAUDE.md's command list against
    `[PROJECT-SPECIFIC: where commands are registered — the CLI module, package.json scripts]`,
    both ways. Then check any per-command marker (cost, safety, destructive) matches what the
-   command does — a mismarked command misleads every session that trusts the list.
+   command does.
 7. **Boundary promises** — any rule CLAUDE.md states about a surface ("routes under X touch
    only Y," "module A never imports B") — check it against the artifact that proves it:
    `[PROJECT-SPECIFIC: the API spec, the import graph, the route table]`.
@@ -64,12 +62,12 @@ Nothing else catches these, because they cross from code into docs.
    `.agents/PRD.md`.
 9. **Skills** — `.claude/skills/` against CLAUDE.md's list, both ways.
 10. **Settings** — `.env.example` against `[PROJECT-SPECIFIC: the settings/config module]`,
-    both ways. A setting with no example is one nobody can find.
+    both ways.
 
 ## Don't
 
 - **Don't delete a half-built doc.** One half shipped and the other did not is the normal
-  case. Re-status it naming both; deleting loses real unbuilt scope.
+  case; re-status it naming both.
 - **Don't delete plans.** `/piv-loop:review-plan-code` runs after execution and needs the
   plan. Report a shipped plan as a candidate and let the operator decide.
 - **Don't review writing quality.** You check whether a statement is still true, not whether it

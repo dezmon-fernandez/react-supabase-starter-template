@@ -13,7 +13,7 @@ Read plan file: `$ARGUMENTS`
 
 ### 1. Read and Understand
 
-- Read the ENTIRE plan carefully
+- Read the ENTIRE plan
 - Understand all tasks and their dependencies
 - Note the validation commands to run
 - Review the testing strategy

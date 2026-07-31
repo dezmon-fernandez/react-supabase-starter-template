@@ -19,9 +19,8 @@ Answer two questions, independently:
    plan specifies is implemented and tested.
 2. **What did the plan miss?** Cases the code must handle that the plan never named.
 
-The first keeps the implementation honest to the contract. The second keeps the contract honest to
-reality — and a case the plan failed to name is the more valuable find, because it exposes a gap in
-the plan, not just the code.
+A case the plan failed to name is the more valuable find — it exposes a gap in the plan, not just
+the code.
 
 ## Process
 

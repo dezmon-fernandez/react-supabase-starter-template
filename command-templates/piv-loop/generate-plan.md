@@ -10,7 +10,7 @@ description: "Create comprehensive feature plan with deep codebase analysis and 
 
 Transform a feature request into a **comprehensive implementation plan** through systematic codebase analysis, external research, and strategic planning.
 
-**Core Principle**: We do NOT write code in this phase. Our goal is to create a context-rich implementation plan that enables one-pass implementation success for ai agents. The plan specifies the **contract** (signatures, types, data models, behavioral rules, edge cases) and a **high-level implementation plan in pseudocode** — it guides the implementer, it does not pre-write the code. Pseudocode, examples, and specs are encouraged; literal, paste-ready code is not. **Litmus**: if the implementer could paste it and be done, it's code — back off to pseudocode.
+**Core Principle**: We do NOT write code in this phase. The plan specifies the **contract** (signatures, types, data models, behavioral rules, edge cases) and a **high-level implementation plan in pseudocode** — it guides the implementer, it does not pre-write the code. Pseudocode, examples, and specs are encouraged; literal, paste-ready code is not. **Litmus**: if the implementer could paste it and be done, it's code — back off to pseudocode.
 
 **Key Philosophy**: Context is King. The plan must contain ALL information needed for implementation - patterns, mandatory reading, documentation, the contract, a pseudocode implementation plan, and validation commands - so the execution agent succeeds on the first attempt.
 
@@ -124,8 +124,7 @@ So that <benefit/value>
 ### Phase 3.5: Decision Gate (mandatory — never write the plan while an open question remains)
 
 Open questions in a feature idea are user policy wearing an architecture costume: the codebase
-cannot answer them, and a plan that guesses them decides for the user. This gate runs after
-research on purpose — research is what arms you to ask well.
+cannot answer them, and a plan that guesses them decides for the user.
 
 **Collect every unresolved decision:**
 
@@ -149,7 +148,7 @@ research on purpose — research is what arms you to ask well.
 
 **Done when:** zero open questions remain, and every decision appears in the plan as a settled
 fact the executor can act on (in the Feature Description or NOTES) — never as an option list or
-an open item. The executor holds only the plan, not this conversation.
+an open item.
 
 ### Phase 4: Deep Strategic Thinking
 
@@ -179,7 +178,7 @@ The plan document you produce follows `.agents/documentation/authoring-for-agent
 
 **Create comprehensive plan with the following structure:**
 
-Whats below here is a template for you to fill for the implementation agent. It specifies the contract (the WHAT) and a high-level implementation plan in pseudocode (the HOW, as a sketch). It contains no literal, paste-ready code.
+Whats below here is a template for you to fill for the implementation agent: the contract (the WHAT) and a high-level implementation plan in pseudocode (the HOW, as a sketch).
 
 ```markdown
 # Feature: <feature-name>
@@ -272,7 +271,7 @@ So that <benefit/value>
 
 ### Edge Cases & Failure Modes
 
-<Enumerate every path of each public method — boundaries, missing/empty/malformed input, error paths — each with its required behavior. Every one of these must have a test. A path you don't enumerate is a path the implementer guesses and the reviewer can't check.>
+<Enumerate every path of each public method — boundaries, missing/empty/malformed input, error paths — each with its required behavior. Every one of these must have a test.>
 
 ---
 

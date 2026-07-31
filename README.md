@@ -41,7 +41,7 @@ Same as `next-supabase` but with local `.next-docs/` directory for version-accur
 
 **Stack:** Next.js 16, React 19, App Router, Server Components, Supabase, shadcn/ui, Tailwind v4
 
-**Best for:** Same use cases as above, with local-first documentation for more accurate AI-assisted development.
+**Best for:** Same use cases as `next-supabase`, with version-accurate local docs.
 
 ### react-spa-supabase
 Client-rendered React 19 SPA with Supabase backend.
