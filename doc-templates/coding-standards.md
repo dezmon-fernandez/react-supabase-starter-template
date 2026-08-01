@@ -10,6 +10,9 @@ These apply across all stacks:
 - **Folders never group by kind.** `orders/`, `billing/` — not `components/`, `models/`, `helpers/`, `utils/`. Read `vertical-slice-architecture.md` for the other axis: whether a folder names a feature or a domain.
 - **Shared material leaves the file.** Constants, lookup tables, and helpers used by more than one component move to their own module, so a file holds one component plus only what that component alone uses.
 - **A file's name states what the file holds.** When the name describes one thing and the file holds several, the file is wrong, not the name.
+- **Placement follows consumers.** Count the files that import a file. One consumer puts it beside that consumer; two or more put it in the nearest folder that holds all of them.
+- **One consumer means internals.** A file imported by exactly one other file is that file's internals and belongs beside it, however much of the codebase depends on it downstream. The importer need not be a top-level module or entry point — a helper composed by one module sits beside that module.
+- **Count with a search, not by eye.** Grep the tree for the file's name in this stack's import syntax; the hits are its consumers. A file's own test is never a consumer.
 
 ## Naming Conventions: Identifiers and Filenames
 
@@ -52,6 +55,8 @@ These apply across all stacks:
 ## Module Organization: Group by What Changes Together
 
 Two components, modules, or classes never share a file, however alike they look. Order the parallel entries inside one file — route registrations, subcommand definitions, an event-handler map — by what changes together, never by what looks alike.
+
+A parallel-entry file is legitimate only while every entry has the same owner. When the entries belong to different slices, features, or domains, the file is a by-kind grouping. Each entry belongs with the slice that owns it. Registration order and a shared prelude are not ownership.
 
 Each entry reads as an identically-shaped block, over a short shared section holding only what two or more entries use. Never organize by layer — all parsers together, then all handlers — because every real task is "change one feature," and layering splits that one task across the whole file.
 

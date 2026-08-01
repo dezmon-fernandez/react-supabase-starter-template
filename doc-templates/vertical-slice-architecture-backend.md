@@ -39,6 +39,20 @@ When the tell fires, the folders are stages of one domain's pipeline — nest th
 
 **Downstream services usually don't domain-slice.** A service consuming an upstream that already absorbed the domain variation — one contract, one generated schema, the domain arriving as a parameter — has no source variation left to slice on; its whole things are its own workflows and views. A domain folder there would hold near-identical copies differing by a parameter: duplication over uniformity, the inverse of the extraction litmus. Domain slicing earns itself downstream only when domain-specific behavior genuinely reaches that layer.
 
+## Placement: Where a Single Module Goes
+
+- **Placement follows consumers.** Count the modules that import a module. One consumer puts it beside that consumer; two or more put it in the nearest package that holds all of them. When the consumers sit in different slices, the three-feature rule under Shared decides whether it moves out of a slice at all.
+- **One consumer means internals.** A module imported by exactly one other module is that module's internals and belongs beside it, however much of the service depends on it downstream. The importer need not be an entry point — a helper composed by one pipeline sits beside that pipeline.
+- **Count with a search, not by eye.** `grep -rnE "(import|from) [a-z_.]*module_name" src/` counts a module's consumers. A module's own test is never a consumer.
+
+A module that grows past a few hundred lines asks the same question in the same three shapes:
+
+1. Entries belong to the slices that own them — a move, decided by the placement rule.
+2. A level of grouping is missing — one new module or subpackage.
+3. One genuinely large composition, every part correctly placed — narrowing takes decomposing it, and no move helps.
+
+A single module holding every slice's entries is a by-kind grouping with the folder flattened into a file. Length alone is not a defect; only the consumer counts say whether an entry is misplaced.
+
 ## What a Slice Owns
 
 Every property below is a rule for writing new code, and together they are the definition of done for a slice. `[STACK-SPECIFIC: map each artifact to this stack's file names.]`
