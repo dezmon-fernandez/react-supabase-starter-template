@@ -70,7 +70,7 @@ What does NOT belong in shared:
 
 Each feature owns everything it needs.
 
-A feature is a whole thing a user can name — never a pipeline stage and never a layer. Apps downstream of an API that already unified its domains (one contract, the domain arriving as a parameter) slice by feature alone: a per-domain folder would hold near-identical copies differing by a parameter. Within a module, the same grouping rule continues at file scale — read the Module Organization (stanza) section of `coding-standards.md`.
+A feature is a whole thing a user can name — never a pipeline stage and never a layer. Apps downstream of an API that already unified its domains (one contract, the domain arriving as a parameter) slice by feature alone: a per-domain folder would hold near-identical copies differing by a parameter. Within a module, the same grouping rule continues at file scale — read the File Granularity and Module Organization sections of `coding-standards.md`.
 
 [STACK-SPECIFIC: Feature structure — what files live in a feature for this stack.]
 
@@ -81,6 +81,20 @@ A feature is a whole thing a user can name — never a pipeline stage and never 
 - Public API via barrel file (`index.ts` / `__init__.py`) — consumers never reach into internals
 
 Not every feature needs every file. Start with the minimum, add files as the feature grows.
+
+## Placement: Where a Single File Goes
+
+- **Placement follows consumers.** Count the files that import a file. One consumer puts it beside that consumer; two or more put it in the nearest folder that holds all of them. When the consumers sit in different features, the three-feature rule above decides whether that folder is `shared/`.
+- **One consumer means internals.** A file imported by exactly one other file is that file's internals and belongs beside it, however much of the app depends on it downstream. The importer need not be a page or a top-level component — a hook or subcomponent composed by one module sits beside that module.
+- **Count with a search, not by eye.** `grep -rn "from ['\"].*/file-name['\"]" src/` counts a file's consumers. A file's own test is never a consumer.
+
+A directory over roughly ten entries, or one mixing many loose files with subfolders, asks a question with three answers:
+
+1. Files are misplaced — a move, decided by the placement rule.
+2. A level of grouping is missing — one new folder.
+3. One parent genuinely composes that many children, each correctly placed — narrowing takes decomposing the parent, and no move helps.
+
+Width alone is not a defect; only the consumer counts say whether a file is misplaced.
 
 ## Cross-Feature Patterns
 

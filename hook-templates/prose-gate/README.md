@@ -1,15 +1,11 @@
 # Prose gate
 
 A PostToolUse hook that fires after every `Edit`/`Write`. When the edited file is
-governance prose — `CLAUDE.md`, anything under `.agents/documentation/`, a skill, or a
-command — it injects a reminder into the editing session's context to run the
-authoring-for-agents smell test over the changed text. On any other path it is silent,
-and it never fails loudly: a malformed payload yields an empty path, which simply
-doesn't match.
-
-The point: rules, standards, skills, and commands are prose future sessions will obey.
-This hook makes the smell test fire at the moment such prose changes, instead of
-relying on the author to remember it.
+governance prose — `CLAUDE.md`, anything under `.agents/documentation/`, `.agents/plans/`,
+or `.agents/feature-ideas/`, a skill, or a command — it injects a reminder into the
+editing session's context to run the authoring-for-agents smell test over the changed
+text. On any other path it is silent, and it never fails loudly: a malformed payload
+yields an empty path, which doesn't match.
 
 ## Requirements
 

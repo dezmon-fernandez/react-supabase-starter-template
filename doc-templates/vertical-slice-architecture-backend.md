@@ -33,11 +33,25 @@ When the tell fires, the folders are stages of one domain's pipeline — nest th
 
 **Apply the test to every slice as its real inputs arrive.** Code whose vocabulary belongs to one domain lives in that domain's slice, even if it began life elsewhere; only machinery that never touches domain vocabulary stays domain-free. A slice that hollows out as its contents migrate to the right grain is the rule working, not failing.
 
-**Copy-the-sibling works at every grain.** Within a domain slice, a new pipeline copies its sibling subpackage; across domains, a new domain copies the whole sibling slice. Symmetric shapes keep duplication visible, which is what makes the three-instance extraction call obvious. The same rule continues below the file boundary — read the Module Organization (stanza) section of `coding-standards.md` for the within-module grain.
+**Copy-the-sibling works at every grain.** Within a domain slice, a new pipeline copies its sibling subpackage; across domains, a new domain copies the whole sibling slice. Symmetric shapes keep duplication visible, which is what makes the three-instance extraction call obvious. The same rule continues below the file boundary — read the File Granularity and Module Organization sections of `coding-standards.md` for the within-module grain.
 
 **Depth follows the axes.** One folder level per axis of variation, each level answering a distinct question (which domain → which pipeline → which artifact). Two levels answering the same question, or a level with one permanent child, is the over-nesting tell.
 
 **Downstream services usually don't domain-slice.** A service consuming an upstream that already absorbed the domain variation — one contract, one generated schema, the domain arriving as a parameter — has no source variation left to slice on; its whole things are its own workflows and views. A domain folder there would hold near-identical copies differing by a parameter: duplication over uniformity, the inverse of the extraction litmus. Domain slicing earns itself downstream only when domain-specific behavior genuinely reaches that layer.
+
+## Placement: Where a Single Module Goes
+
+- **Placement follows consumers.** Count the modules that import a module. One consumer puts it beside that consumer; two or more put it in the nearest package that holds all of them. When the consumers sit in different slices, the three-feature rule under Shared decides whether it moves out of a slice at all.
+- **One consumer means internals.** A module imported by exactly one other module is that module's internals and belongs beside it, however much of the service depends on it downstream. The importer need not be an entry point — a helper composed by one pipeline sits beside that pipeline.
+- **Count with a search, not by eye.** `grep -rnE "(import|from) [a-z_.]*module_name" src/` counts a module's consumers. A module's own test is never a consumer.
+
+A module that grows past a few hundred lines asks the same question in the same three shapes:
+
+1. Entries belong to the slices that own them — a move, decided by the placement rule.
+2. A level of grouping is missing — one new module or subpackage.
+3. One genuinely large composition, every part correctly placed — narrowing takes decomposing it, and no move helps.
+
+A single module holding every slice's entries is a by-kind grouping with the folder flattened into a file. Length alone is not a defect; only the consumer counts say whether an entry is misplaced.
 
 ## What a Slice Owns
 

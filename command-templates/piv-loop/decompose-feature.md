@@ -19,12 +19,12 @@ A slice entry says **what it develops, the problem it solves, and any constraint
 and stops there. It does not specify signatures, data shapes, enums, file-level design, or tests:
 deciding *how* to build a slice is the plan's job (`/piv-loop:generate-plan`), and the plan discovers
 what to read on its own. Write each entry to be **read at a glance** — plain language, one idea per
-line, the deliverable first. Human readability is the point: if a slice needs a wall of detail to
-describe, it is either two slices or you have started planning it.
+line, the deliverable first. A slice that needs a wall of detail to describe is either two slices or
+one you have started planning.
 
 A slice is the right size when its plan is short and its result is one observable, testable change. A
 slice that forces several unrelated decisions, or whose entry drifts into implementation, is two
-slices — or a plan wearing a roadmap's clothes.
+slices.
 
 ## Process
 
@@ -63,6 +63,8 @@ slices — or a plan wearing a roadmap's clothes.
   shapes, enums, or tests have crept in. If they have, that content belongs in the plan, not here.
 
 ## Output
+
+The roadmap you produce follows `.agents/documentation/authoring-for-agents.md` — read it before writing, and run its smell test over the finished roadmap: the planning session that picks up a slice holds only the roadmap and the repo, never this decomposition session, so every slice entry must be self-contained and coordinate-free.
 
 Write the roadmap to `.agents/feature-ideas/<feature>-roadmap.md`:
 

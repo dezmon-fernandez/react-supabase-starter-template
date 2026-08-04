@@ -2,9 +2,27 @@
 
 > This entire file should be specialized for the target stack. The sections below define the structure — replace all content with framework-specific conventions, examples, and rules during planning/execution. A Next.js template and a Python agent template will look completely different.
 
-## [STACK-SPECIFIC] Naming Conventions
+## File Granularity
 
-> Replace with the stack's actual naming conventions for files, directories, variables, functions, types, constants. Include a table mapping each code element to its convention with real examples from this stack.
+These apply across all stacks:
+
+- **One file, one reason to change.** One component per file for UI code; one module or class per file for backend code.
+- **Folders never group by kind.** `orders/`, `billing/` — not `components/`, `models/`, `helpers/`, `utils/`. Read `vertical-slice-architecture.md` for the other axis: whether a folder names a feature or a domain.
+- **Shared material leaves the file.** Constants, lookup tables, and helpers used by more than one component move to their own module, so a file holds one component plus only what that component alone uses.
+- **A file's name states what the file holds.** When the name describes one thing and the file holds several, the file is wrong, not the name.
+- **Placement follows consumers.** Count the files that import a file. One consumer puts it beside that consumer; two or more put it in the nearest folder that holds all of them.
+- **One consumer means internals.** A file imported by exactly one other file is that file's internals and belongs beside it, however much of the codebase depends on it downstream. The importer need not be a top-level module or entry point — a helper composed by one module sits beside that module.
+- **Count with a search, not by eye.** Grep the tree for the file's name in this stack's import syntax; the hits are its consumers. A file's own test is never a consumer.
+
+## Naming Conventions: Identifiers and Filenames
+
+These apply across all stacks:
+
+- **No insider abbreviations.** A name a reader must already know the domain to decode is not a name. Write `quantity`, not `qty`, in identifiers and filenames alike.
+- **Name a thing for what it is, not how it is presented or serialized.** `OrderCsvRow` is wrong the moment the same rows are charted or sent as JSON — name it `Order`.
+- **One word, one meaning.** `amount` cannot mean a monetary value in one place and the formatted string that displays it in another. A word that means one thing in this file and something else elsewhere in the codebase makes every reader wrong at least once.
+
+[STACK-SPECIFIC: This stack's conventions for files, directories, variables, functions, types, and constants. Include a table mapping each code element to its convention with real examples from this stack.]
 
 ## [STACK-SPECIFIC] Type System
 
@@ -34,21 +52,24 @@ These apply across all stacks:
 
 [STACK-SPECIFIC: Add a before/after code example in this stack's language showing the early return pattern.]
 
-## Module Organization: Stanzas
+## Module Organization: Group by What Changes Together
 
-Within a module, group code by what changes together, never by what looks alike. A file serving many parallel features — a CLI's subcommands, a router's routes, an event map's handlers — reads as one identically-shaped block per feature (a *stanza*), over a short shared section holding only what two or more stanzas use. Never organize by layer (all parsers together, then all handlers): no real task is ever "change all the parsers" — every task is "change one feature," and layering splits that one task across the whole file.
+Two components, modules, or classes never share a file, however alike they look. Order the parallel entries inside one file — route registrations, subcommand definitions, an event-handler map — by what changes together, never by what looks alike.
 
-The test: adding the next feature means copying one sibling stanza top to bottom. When that stops being true, the shape has drifted — fix the drift, don't invent a new organization.
+A parallel-entry file is legitimate only while every entry has the same owner. When the entries belong to different slices, features, or domains, the file is a by-kind grouping. Each entry belongs with the slice that owns it. Registration order and a shared prelude are not ownership.
+
+Each entry reads as an identically-shaped block, over a short shared section holding only what two or more entries use. Never organize by layer — all parsers together, then all handlers — because every real task is "change one feature," and layering splits that one task across the whole file.
+
+The test: adding the next entry means copying one sibling top to bottom. When that stops being true, the shape has drifted — fix the drift, don't invent a new organization.
 
 ## Components
 
 These apply to UI stacks. Remove this section for non-UI stacks (agents, CLI tools, APIs).
 
-- **One component per file** for anything non-trivial.
 - **Props interfaces** defined in the same file, above the component.
 - **Destructure props** in the function signature.
 - **Handle all states**: loading, error, empty, success.
-- **Colocate** — keep components near the feature that uses them, not in a global folder (except shared UI like shadcn).
+- **Shared UI is the exception to colocation** — a presentational component with no feature of its own lives in the shared UI folder.
 
 [STACK-SPECIFIC: Component patterns for this framework — server vs client components, directive usage, lifecycle hooks, state management, rendering patterns. Include real code examples.]
 

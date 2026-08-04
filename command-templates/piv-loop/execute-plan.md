@@ -13,7 +13,7 @@ Read plan file: `$ARGUMENTS`
 
 ### 1. Read and Understand
 
-- Read the ENTIRE plan carefully
+- Read the ENTIRE plan
 - Understand all tasks and their dependencies
 - Note the validation commands to run
 - Review the testing strategy
@@ -31,6 +31,9 @@ For EACH task in "Step by Step Tasks":
 - Maintain consistency with existing code patterns
 - Include proper type hints and documentation
 - Add structured logging where appropriate
+- Behavior-name everything you write: code, comments, docstrings, and test names never carry the
+  plan's internal labels, edge-case row IDs, or roadmap coordinates — state the reason inline (the
+  plan is deleted at merge)
 
 #### c. Verify as you go
 - After each file change, check syntax
@@ -68,6 +71,7 @@ Before completing:
 - ✅ All validation commands pass
 - ✅ Code follows project conventions
 - ✅ Documentation added/updated as needed
+- ✅ No plan/roadmap coordinates in code, comments, docstrings, or test names
 
 ## Output Report
 
