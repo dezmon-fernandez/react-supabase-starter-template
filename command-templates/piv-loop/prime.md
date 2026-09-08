@@ -10,13 +10,36 @@ Build comprehensive understanding of the codebase by analyzing structure, docume
 
 ## Process
 
+### 0. Consume a pending handover
+
+A previous session may have left `.agents/handover.md`: live state for whoever resumes,
+covering what is half-done, what is blocked, and which claims were verified versus assumed.
+
+Its contents:
+
+!`cat .agents/handover.md 2>/dev/null || echo "(no pending handover)"`
+
+If that printed `(no pending handover)`, skip to step 1. Otherwise:
+
+1. Treat the handover as the current position for the rest of this priming. Its
+   "Do not" section states operator constraints that stay in force in this session.
+2. Verify any claim in it before acting on that claim in a way that spends credits,
+   writes to production, or cannot be undone. A handover records one moment, and the
+   tree may have moved since.
+3. **Delete the file before continuing.** Run `git rm --cached .agents/handover.md`
+   first if it is tracked or staged, then remove it from disk. A handover left in place
+   is read by a later session as though it were still current, and is overwritten by
+   the next run of the `/handover` skill that produced it.
+4. Carry what it says into the report. The "Where we left off" section at the end is
+   written from it.
+
 ### 1. Analyze Project Structure
 
-List all tracked files:
+All tracked files:
 !`git ls-files`
 
-Show directory structure:
-!`tree -L 3 -I 'node_modules|__pycache__|.git|dist|build'`
+Directory structure:
+!`tree -L 3 -I 'node_modules|__pycache__|.git|dist|build' 2>/dev/null || echo "(tree not installed — see git ls-files above)"`
 
 ### 2. Read Core Documentation
 
@@ -25,14 +48,8 @@ Show directory structure:
 - Read README files at project root and major directories
 - Read any architecture documentation
 
-**Artifact index — the domain-doc map** (read each when its trigger fires; pull the relevant ones now during priming, the rest on demand):
-
-| Artifact | Read when… |
-|---|---|
-| `.agents/PRD.md` | the spec / source of truth — before any feature work. |
-| `[STACK-SPECIFIC: the schema source of truth, e.g. migrations/*.sql — drop this row if the stack has none]` | you need table shapes, columns, or constraints. |
-| `[PROJECT-SPECIFIC: a domain standard, e.g. .agents/documentation/<topic>.md]` | `[PROJECT-SPECIFIC: its trigger, e.g. working in that domain's slices.]` |
-| `[PROJECT-SPECIFIC: a workflow or reference doc the project relies on]` | `[PROJECT-SPECIFIC: its trigger.]` |
+**The documentation map lives in CLAUDE.md** ("Documentation map"). Pull in now the rows whose
+trigger the pending work fires; leave the rest for the moment it does.
 
 ### 3. Identify Key Files
 
@@ -44,10 +61,12 @@ Based on the structure, identify and read:
 
 ### 4. Understand Current State
 
-Check recent activity:
+Recent activity:
+
 !`git log -10 --oneline`
 
-Check current branch and status:
+Current branch and working-tree state:
+
 !`git status`
 
 ## Output Report
@@ -80,4 +99,24 @@ Provide a concise summary covering:
 - Recent changes or development focus
 - Any immediate observations or concerns
 
-**Make this summary easy to scan - use bullet points and clear headers.**
+**Make the sections above easy to scan - use bullet points and clear headers.**
+
+### Where we left off
+Include this section only when step 0 consumed a handover; otherwise end the report above.
+
+Brief the operator in two parts, both drawn from the handover.
+
+First the story, one prose paragraph: what we are building and why, and where it stands —
+the decision made, the assumption disproven, the constraint hit. Real names (files,
+branches, commands), never session shorthand; lead with what would surprise someone
+returning after a day away.
+
+Then the same-page check:
+
+- **What we know** — the facts in force, anything still assumed flagged as such, and
+  operator constraints quoted verbatim.
+- **Next task(s)** — the immediate work, in order.
+- **Open decisions** — calls only the operator can make, and what each unblocks.
+
+If the operator can read it in thirty seconds and start working without opening another
+file, it worked.
